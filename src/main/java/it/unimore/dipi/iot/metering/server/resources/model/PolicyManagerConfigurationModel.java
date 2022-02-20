@@ -1,18 +1,27 @@
 package it.unimore.dipi.iot.metering.server.resources.model;
 
-public class ConsumptionPolicyModel {
+import java.util.ArrayList;
+
+public class PolicyManagerConfigurationModel {
+    // Max energy consumption
     private Double energyConsumptionThreshold;
 
+    // Max water consumption
     private Double waterConsumptionThreshold;
 
+    // Max gas consumption
     private Double gasConsumptionThreshold;
 
-    public ConsumptionPolicyModel() {}
+    // Observed meters list
+    private ArrayList<String> observedMeters;
 
-    public ConsumptionPolicyModel(Double energyConsumptionThreshold, Double waterConsumptionThreshold, Double gasConsumptionThreshold) {
+    public PolicyManagerConfigurationModel() {}
+
+    public PolicyManagerConfigurationModel(Double energyConsumptionThreshold, Double waterConsumptionThreshold, Double gasConsumptionThreshold, ArrayList<String> observedMeters) {
         this.energyConsumptionThreshold = energyConsumptionThreshold;
         this.waterConsumptionThreshold = waterConsumptionThreshold;
         this.gasConsumptionThreshold = gasConsumptionThreshold;
+        this.observedMeters = observedMeters;
     }
 
     public Double getEnergyConsumptionThreshold() {
@@ -37,5 +46,13 @@ public class ConsumptionPolicyModel {
 
     public void setGasConsumptionThreshold(Double gasConsumptionThreshold) {
         this.gasConsumptionThreshold = gasConsumptionThreshold;
+    }
+
+    public ArrayList<String> getObservedMeters() {
+        return observedMeters;
+    }
+
+    public void setObservedMeters(ArrayList<String> observedMeters) {
+        this.observedMeters = observedMeters;
     }
 }

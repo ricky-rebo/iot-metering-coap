@@ -1,7 +1,7 @@
 package it.unimore.dipi.iot.metering.server.resources.coap;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.unimore.dipi.iot.metering.server.resources.model.ConsumptionPolicyModel;
+import it.unimore.dipi.iot.metering.server.resources.model.PolicyManagerConfigurationModel;
 import it.unimore.dipi.iot.metering.server.resources.raw.PolicyManagerRawConfigParameter;
 import it.unimore.dipi.iot.metering.utils.SenMLPack;
 import it.unimore.dipi.iot.metering.utils.SenMLRecord;
@@ -23,7 +23,7 @@ public class CoapPolicyParameterResource extends CoapResource {
     private String deviceID;
 
     private PolicyManagerRawConfigParameter rawConfigParameter;
-    private ConsumptionPolicyModel policy;
+    private PolicyManagerConfigurationModel policy;
 
     private ObjectMapper mapper;
 
@@ -55,7 +55,7 @@ public class CoapPolicyParameterResource extends CoapResource {
 
             this.rawConfigParameter.addValueChangeListener(evt -> {
                 logger.info("Policy Manager configuration updated! -> New config: {}", evt.getNewValue());
-                policy = (ConsumptionPolicyModel) evt.getNewValue();
+                policy = (PolicyManagerConfigurationModel) evt.getNewValue();
                 changed();
             });
         } catch (Exception e) {
@@ -67,7 +67,7 @@ public class CoapPolicyParameterResource extends CoapResource {
         try {
             SenMLRecord base = new SenMLRecord() {{
                 setBver(VERSION);
-                setBn(String.format("%s:%s", deviceID, getName()));
+                setBn(String.format("%s:%s:policy", deviceID, getName()));
             }};
 
             SenMLRecord maxEnergyConsumption = new SenMLRecord() {{
@@ -82,7 +82,10 @@ public class CoapPolicyParameterResource extends CoapResource {
 
             SenMLRecord maxGasConsumption = new SenMLRecord() {{
                 setN("max_gas_consumption");
+                setV(policy.getGasConsumptionThreshold());
             }};
+
+            // TODO add observedMetersList alla response
 
             SenMLPack pack = new SenMLPack() {{
                 add(base);

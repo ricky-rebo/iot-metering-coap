@@ -53,7 +53,7 @@ public class CoapSwitchResource extends CoapResource {
             getAttributes().addAttribute("rt", switchRawActuator.getType());
             getAttributes().addAttribute("if", "core.a");
             getAttributes().addAttribute("ct", Integer.toString(MediaTypeRegistry.APPLICATION_SENML_JSON));
-            getAttributes().addAttribute("ct", Integer.toString(MediaTypeRegistry.TEXT_PLAIN)); // TODO remove ???
+            getAttributes().addAttribute("ct", Integer.toString(MediaTypeRegistry.TEXT_PLAIN));
 
             this.switchRawActuator.addValueChangeListener(evt -> {
                 logger.info("Raw actuator state updated ! New Value: {}", evt.getNewValue());

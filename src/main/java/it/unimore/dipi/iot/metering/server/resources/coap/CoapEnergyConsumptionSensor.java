@@ -7,7 +7,7 @@ public class CoapEnergyConsumptionSensor extends CoapGenericConsumptionResource<
     private static final String UNIT = "kWh";
     private static final Number VERSION = 0.1;
 
-    public CoapEnergyConsumptionSensor (String name, String deviceID, EnergyConsumptionRawSensor rawSensor) {
-        super(SENSOR_TITLE, UNIT, VERSION, name, deviceID, rawSensor);
+    public CoapEnergyConsumptionSensor (String deviceID, String name, EnergyConsumptionRawSensor rawSensor) {
+        super(SENSOR_TITLE, UNIT, VERSION, deviceID, name, rawSensor);
     }
 }
