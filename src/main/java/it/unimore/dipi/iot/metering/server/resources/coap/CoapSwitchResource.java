@@ -109,7 +109,7 @@ public class CoapSwitchResource extends CoapResource {
     public void handlePOST(CoapExchange exchange) {
         try {
             // Check if payload is null (otherwise the request is unacceptable
-            if (exchange.getRequestPayload() == null) {
+            if (exchange.getRequestPayload().length == 0) {
                 this.state = !this.state;
                 this.switchRawActuator.setValue(this.state);
 
@@ -129,7 +129,7 @@ public class CoapSwitchResource extends CoapResource {
     @Override
     public void handlePUT(CoapExchange exchange) {
         try {
-            if (exchange.getRequestPayload() != null) {
+            if (exchange.getRequestPayload().length != 0) {
                 this.state = Boolean.parseBoolean(new String(exchange.getRequestPayload()));
                 this.switchRawActuator.setValue(this.state);
 
