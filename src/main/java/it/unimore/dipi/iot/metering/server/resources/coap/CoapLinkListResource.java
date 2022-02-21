@@ -4,16 +4,12 @@ import org.eclipse.californium.core.CoapResource;
 import org.eclipse.californium.core.coap.CoAP.ResponseCode;
 import org.eclipse.californium.core.coap.MediaTypeRegistry;
 import org.eclipse.californium.core.server.resources.CoapExchange;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class CoapMetersLinkListResource extends CoapResource {
-//    private static final Logger logger = LoggerFactory.getLogger(CoapMetersLinkListResource.class);
-
+public class CoapLinkListResource extends CoapResource {
     private static final String RESOURCE_TYPE = "iot:link-list";
     private static final String INTERFACE_DESCRIPTOR = "core.ll";
 
-    public CoapMetersLinkListResource(String name, String title) {
+    public CoapLinkListResource(String name, String title) {
         super(name);
 
         // Set resource attributes
@@ -21,6 +17,8 @@ public class CoapMetersLinkListResource extends CoapResource {
         getAttributes().addAttribute("rt", RESOURCE_TYPE);
         getAttributes().addAttribute("if", INTERFACE_DESCRIPTOR);
         getAttributes().addAttribute("ct", Integer.toString(MediaTypeRegistry.APPLICATION_LINK_FORMAT));
+        // IMPROVE add senml ct
+        // IMPROVE add text/plain ct
     }
 
     @Override
@@ -35,6 +33,7 @@ public class CoapMetersLinkListResource extends CoapResource {
                         sb.append(
                                 String.format("<%s>;rt=\"%s\";if=\"%s\",",
                                     meterRef.getURI(),
+                                        // IMPROVE add ct attribute
                                     meterRef.getAttributes().getResourceTypes().get(0),
                                     meterRef.getAttributes().getInterfaceDescriptions().get(0)
                                 )
