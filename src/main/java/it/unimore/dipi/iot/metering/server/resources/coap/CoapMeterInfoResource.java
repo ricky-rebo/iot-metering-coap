@@ -1,5 +1,6 @@
 package it.unimore.dipi.iot.metering.server.resources.coap;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.unimore.dipi.iot.metering.server.resources.model.MeterInfoDescriptor;
 import it.unimore.dipi.iot.metering.utils.SenMLPack;
@@ -31,6 +32,7 @@ public class CoapMeterInfoResource extends CoapResource {
         this.deviceInfo = deviceInfo;
 
         this.mapper = new ObjectMapper();
+        this.mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
         this.getAttributes().setTitle(RESOURCE_TITLE);
         getAttributes().addAttribute("rt", RESOURCE_TYPE);
@@ -43,7 +45,7 @@ public class CoapMeterInfoResource extends CoapResource {
         try {
             SenMLPack pack = new SenMLPack() {{
                 add(new SenMLRecord() {{
-                    setBn("device-info");
+                    setBn("device-info/");
                     setBver(deviceInfo.getMeterVersion());
                     setBt(System.currentTimeMillis());
                 }});
