@@ -31,11 +31,12 @@ public class CoapLinkListResource extends CoapResource {
                 this.getChildren().forEach(child -> {
                     child.getChildren().forEach(meterRef -> {
                         sb.append(
-                                String.format("<%s>;rt=\"%s\";if=\"%s\",",
+                                String.format("<%s>;ct=\"%s\";rt=\"%s\";if=\"%s\";title=\"%s\",",
                                     meterRef.getURI(),
-                                        // IMPROVE add ct attribute
+                                    meterRef.getAttributes().getContentTypes().toString().replace("[", "").replace("]", "").replace(",", ""),
                                     meterRef.getAttributes().getResourceTypes().get(0),
-                                    meterRef.getAttributes().getInterfaceDescriptions().get(0)
+                                    meterRef.getAttributes().getInterfaceDescriptions().get(0),
+                                    meterRef.getAttributes().getTitle()
                                 )
                         );
                     });
