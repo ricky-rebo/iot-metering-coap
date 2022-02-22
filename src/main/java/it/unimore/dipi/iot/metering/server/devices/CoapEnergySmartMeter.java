@@ -12,46 +12,34 @@ import org.slf4j.LoggerFactory;
 
 import java.util.UUID;
 
-public class CoapEnergySmartMeter extends CoapServer {
+public class CoapEnergySmartMeter extends CoapSmartMeter<EnergyConsumptionRawSensor, CoapEnergyConsumptionSensor> {
     private static final Logger logger = LoggerFactory.getLogger(CoapEnergySmartMeter.class);
 
     private static final Number DEVICE_VERSION = 1.0;
     private static final String DEVICE_TYPE = "energy";
 
-    private final String deviceID;
-
     public CoapEnergySmartMeter(int port) {
         super(port);
-
-        this.deviceID = UUID.randomUUID().toString();
-
-        // Create device info resource
-        CoapMeterInfoResource deviceInfoResource = new CoapMeterInfoResource(
-                "device-info",
-                new MeterInfoDescriptor(deviceID, DEVICE_VERSION, DEVICE_TYPE)
-        );
-
-        // Create consumption sensor
-        EnergyConsumptionRawSensor energyRawSensor = new EnergyConsumptionRawSensor();
-        CoapEnergyConsumptionSensor coapEnergyResource = new CoapEnergyConsumptionSensor(deviceID, "consumption", energyRawSensor);
-
-        // Create switch actuator
-        SwitchRawActuator switchRawActuator = new SwitchRawActuator();
-        CoapSwitchResource coapSwitchResource = new CoapSwitchResource(deviceID, "switch", switchRawActuator);
-
-        // Add resources
-        this.add(deviceInfoResource, coapEnergyResource, coapSwitchResource);
-
-        // Register to switch state change
-        switchRawActuator.addValueChangeListener(evt -> {
-            logger.info("Switch state updated! -> {}", (Boolean)evt.getNewValue() ? "ON" : "OFF");
-            logger.info("Updating sensor state...");
-            energyRawSensor.setActive((Boolean)evt.getNewValue());
-        });
     }
 
-    public String getDeviceID() {
-        return deviceID;
+    @Override
+    protected String getDeviceType() {
+        return DEVICE_TYPE;
+    }
+
+    @Override
+    protected Number getDeviceVersion() {
+        return DEVICE_VERSION;
+    }
+
+    @Override
+    protected EnergyConsumptionRawSensor getConsumptionRawSensor() {
+        return new EnergyConsumptionRawSensor();
+    }
+
+    @Override
+    protected CoapEnergyConsumptionSensor getCoapConsumptionResource(String deviceID, String name, EnergyConsumptionRawSensor consumptionRawResource) {
+        return new CoapEnergyConsumptionSensor(deviceID, name, consumptionRawResource);
     }
 
     public static void main(String[] args) {
@@ -64,9 +52,7 @@ public class CoapEnergySmartMeter extends CoapServer {
         device.getRoot().getChildren().forEach(resource -> {
             logger.info("Resource {} -> URI: {} (Observable: {})", resource.getName(), resource.getURI(), resource.isObservable());
             if (!resource.getURI().equals("/.well-known")) {
-                resource.getChildren().forEach(childResource -> {
-                    logger.info("\t Resource {} -> URI: {} (Observable: {})", childResource.getName(), childResource.getURI(), childResource.isObservable());
-                });
+                resource.getChildren().forEach(childResource -> logger.info("\t Resource {} -> URI: {} (Observable: {})", childResource.getName(), childResource.getURI(), childResource.isObservable()));
             }
         });
     }
