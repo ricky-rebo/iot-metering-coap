@@ -6,6 +6,7 @@ import it.unimore.dipi.iot.metering.server.resources.coap.CoapSwitchResource;
 import it.unimore.dipi.iot.metering.server.resources.model.MeterInfoDescriptor;
 import it.unimore.dipi.iot.metering.server.resources.raw.EnergyConsumptionRawSensor;
 import it.unimore.dipi.iot.metering.server.resources.raw.SwitchRawActuator;
+import it.unimore.dipi.iot.metering.utils.Utils;
 import org.eclipse.californium.core.CoapServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,12 +49,6 @@ public class CoapEnergySmartMeter extends CoapSmartMeter<EnergyConsumptionRawSen
         device.start();
 
         logger.info("Coap Server Started ! Available resources: ");
-
-        device.getRoot().getChildren().forEach(resource -> {
-            logger.info("Resource {} -> URI: {} (Observable: {})", resource.getName(), resource.getURI(), resource.isObservable());
-            if (!resource.getURI().equals("/.well-known")) {
-                resource.getChildren().forEach(childResource -> logger.info("\t Resource {} -> URI: {} (Observable: {})", childResource.getName(), childResource.getURI(), childResource.isObservable()));
-            }
-        });
+        Utils.logServerResources(logger, device);
     }
 }

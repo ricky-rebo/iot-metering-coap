@@ -3,6 +3,8 @@ package it.unimore.dipi.iot.metering.utils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.unimore.dipi.iot.metering.server.resources.model.ResourceURIDescriptor;
+import org.eclipse.californium.core.CoapServer;
+import org.slf4j.Logger;
 
 import java.util.*;
 
@@ -46,7 +48,17 @@ public class Utils {
         }
     }
 
+    public static void logServerResources(Logger logger, CoapServer device) {
+        device.getRoot().getChildren().forEach(resource -> {
+            logger.info("Resource {} -> URI: {} (Observable: {})", resource.getName(), resource.getURI(), resource.isObservable());
+            if (!resource.getURI().equals("/.well-known")) {
+                resource.getChildren().forEach(childResource -> logger.info("\t Resource {} -> URI: {} (Observable: {})", childResource.getName(), childResource.getURI(), childResource.isObservable()));
+            }
+        });
+    }
+
     public static void main (String[] args) {
+        // testing parseLinkFormatText()
         String payload = "</device-info>;ct=\"110 0\";if=\"core.rp\";rt=\"iot:config:device-info\";title=\"MeterInfo\",</consumption>;ct=\"110 0\";if=\"core.s\";obs;rt=\"iot:sensor:energy-consumption\";title=\"EnergyConsumptionSensor\",</switch>;ct=\"110 0\";if=\"core.a\";obs;rt=\"iot:actuator:switch\";title=\"SwitchActuator\"";
         List<ResourceURIDescriptor> resList = parseLinkFormatText(payload);
         resList.forEach(System.out::println);
