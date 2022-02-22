@@ -261,7 +261,9 @@ public class CoapPolicyManager extends CoapServer {
 
     public static void main (String[] args) {
         CoapPolicyManager manager = new CoapPolicyManager(5683, new PolicyManagerConfigurationModel(0.5, 2.0, 2.0, new ArrayList<>() {{
-            add("coap://localhost:5864");
+            add("coap://localhost:5684");
+            add("coap://localhost:5685");
+            add("coap://localhost:5686");
         }}));
 
         manager.start();
