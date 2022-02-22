@@ -18,7 +18,9 @@ public abstract class SmartObjectSensor extends SmartObjectResource<Double> {
     // Internal utils
     private Timer updateTimer;
 
+    //
     private Double value;
+    private Boolean active;
 
     public SmartObjectSensor () { super(); }
 
@@ -30,11 +32,12 @@ public abstract class SmartObjectSensor extends SmartObjectResource<Double> {
         try {
             this.updateTimer = new Timer();
 
-            value = getStartValue();
+            this.value = getStartValue();
+            this.active = true;
 
             logger.info("Sensor {}:{} initialized!", getType(), getId());
 
-            start();
+            this.start();
         } catch (Exception e) {
             logger.info("Sensor {}:{} NOT initialized! -> Err: {}", getType(), getId(), e.getLocalizedMessage());
         }
@@ -45,7 +48,7 @@ public abstract class SmartObjectSensor extends SmartObjectResource<Double> {
         this.updateTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                setValue(getUpdatedValue());
+                setValue(active ? getUpdatedValue() : 0.0);
             }
         }, getUpdateStartDelay(), getUpdatePeriod());
     }
@@ -77,5 +80,13 @@ public abstract class SmartObjectSensor extends SmartObjectResource<Double> {
             this.value = value;
             this.fireValueChange(oldValue, this.value);
         }
+    }
+
+    public Boolean isActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

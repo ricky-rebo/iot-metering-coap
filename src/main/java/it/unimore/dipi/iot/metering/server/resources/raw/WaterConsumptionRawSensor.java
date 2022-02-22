@@ -21,13 +21,9 @@ public class WaterConsumptionRawSensor extends SmartObjectSensor {
     // Internal utils
     private final Random rand;
 
-    //
-    private boolean active;
-
     public WaterConsumptionRawSensor() {
         super(UUID.randomUUID().toString(), RESOURCE_TYPE);
         this.rand = new Random(System.currentTimeMillis());
-        this.active = true;
         init();
     }
 
@@ -38,22 +34,14 @@ public class WaterConsumptionRawSensor extends SmartObjectSensor {
 
     @Override
     protected Double getUpdatedValue() {
-        return active ? (getValue() + (MAX_VALUE_VARIATION - MIN_VALUE_VARIATION) * rand.nextDouble()) : 0.0;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive (boolean active) {
-        this.active = active;
+        return getValue() + (MAX_VALUE_VARIATION - MIN_VALUE_VARIATION) * rand.nextDouble();
     }
 
     public static void main (String[] args) {
         WaterConsumptionRawSensor sensor = new WaterConsumptionRawSensor();
         sensor.addValueChangeListener(evt -> {
             double value = Double.parseDouble(evt.getNewValue().toString());
-            logger.info("New value received from sensor: {} {}", value);
+            logger.info("New value received from sensor: {}", value);
 
             if (value > 7.0 && sensor.isActive()) {
                 logger.warn("Max consumption exceeded!");
