@@ -61,7 +61,7 @@ public abstract class CoapGenericConsumptionResource<T extends SmartObjectSensor
 
             // Subscribe to  raw sensor updates
             this.rawSensor.addValueChangeListener(evt -> {
-                logger.info("Raw sensor value updated ! New Value: {} {}", evt.getNewValue(), this.unit);
+                logger.info("Sensor value updated! -> {} {}", evt.getNewValue(), this.unit);
                 this.value = (Double)evt.getNewValue();
                 changed();
             });
