@@ -229,6 +229,7 @@ public class CoapPolicyManager extends CoapServer {
         }});
     }
 
+    // IMPROVE make this method a factory in MeterInfoDescriptor class -> MeterInfoDescriptor.fromSenmlString(...)
     private Optional<MeterInfoDescriptor> parseDeviceInfoSenml (String payload) {
         try {
             Optional<SenMLPack> senMLPack = Utils.parseSenmlString(payload, this.mapper);
