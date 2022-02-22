@@ -48,7 +48,7 @@ public class CoapEnergySmartMeter extends CoapSmartMeter<EnergyConsumptionRawSen
         CoapEnergySmartMeter device = new CoapEnergySmartMeter(5684);
         device.start();
 
-        logger.info("Coap Server Started ! Available resources: ");
+        logger.info("EnergySmartMeter started! Available resources: ");
         Utils.logServerResources(logger, device);
     }
 }
